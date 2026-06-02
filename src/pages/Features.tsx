@@ -13,6 +13,7 @@ import {
   Activity, Sparkles, BarChart3, Zap, Globe, Shield
 } from 'lucide-react';
 import { useState } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 
 const ICON_MAP: Record<string, React.ElementType> = {
   Search, TrendingUp, Target, Activity, Sparkles, BarChart3
@@ -31,6 +32,7 @@ const INTEGRATIONS = [
 
 export default function Features() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [ref, inView] = useIntersection<HTMLDivElement>({ threshold: 0.05 });
   const [activeFeature, setActiveFeature] = useState(0);
 
@@ -51,7 +53,7 @@ export default function Features() {
               and performance monitoring into one powerful platform.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3">
-              <Button className="bg-gradient-brand hover:opacity-90 text-white gap-2" onClick={() => navigate('/register')}>
+              <Button className="bg-gradient-brand hover:opacity-90 text-white gap-2" onClick={() => navigate(user ? '/dashboard' : '/register')}>
                 Start Free Trial <ArrowRight className="w-4 h-4" />
               </Button>
               <Button variant="outline" onClick={() => navigate('/pricing')}>View Pricing</Button>

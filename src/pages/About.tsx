@@ -12,14 +12,6 @@ import {
   MapPin, Mail, Linkedin, Twitter, ArrowRight
 } from 'lucide-react';
 
-const TEAM = [
-  { name: 'Jordan Lee', role: 'CEO & Co-Founder', bio: 'Ex-Google engineer. 15+ years building data analytics platforms.', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&h=120&fit=crop&crop=face' },
-  { name: 'Priya Sharma', role: 'CTO & Co-Founder', bio: 'Built SEO infrastructure at SEMrush. Machine learning specialist.', avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b76c?w=120&h=120&fit=crop&crop=face' },
-  { name: 'Marcus Chen', role: 'Head of Product', bio: 'Former product lead at Ahrefs. Passionate about UX and data visualization.', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=120&h=120&fit=crop&crop=face' },
-  { name: 'Emma Wilson', role: 'Head of SEO Science', bio: 'PhD in Information Retrieval. Published researcher in search algorithms.', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=120&h=120&fit=crop&crop=face' },
-  { name: 'David Kim', role: 'VP of Engineering', bio: '10+ years building scalable web crawlers and data pipelines.', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&h=120&fit=crop&crop=face' },
-  { name: 'Sofia Rodriguez', role: 'Head of Customer Success', bio: 'Helped 500+ companies achieve their SEO goals over 8 years.', avatar: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=120&h=120&fit=crop&crop=face' },
-];
 
 const VALUES = [
   { icon: Target, title: 'Data-Driven', desc: 'Every recommendation we make is backed by real data, not guesswork.' },
@@ -94,39 +86,6 @@ export default function About() {
           </div>
         </section>
 
-        {/* Team */}
-        <section className="section-padding bg-muted/20">
-          <div className="container-wide">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl font-bold mb-4">Meet our team</h2>
-              <p className="text-muted-foreground max-w-xl mx-auto">
-                Ex-Google, ex-SEMrush, ex-Ahrefs. The world's best SEO engineers and product thinkers.
-              </p>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {TEAM.map(({ name, role, bio, avatar }) => (
-                <div key={name} className="rounded-2xl border border-border bg-background p-5 hover:shadow-md hover:-translate-y-1 transition-all duration-300">
-                  <div className="flex items-center gap-4 mb-3">
-                    <img src={avatar} alt={name} className="w-14 h-14 rounded-full object-cover" loading="lazy" />
-                    <div>
-                      <h3 className="font-bold text-sm">{name}</h3>
-                      <p className="text-xs text-primary font-medium">{role}</p>
-                    </div>
-                  </div>
-                  <p className="text-sm text-muted-foreground">{bio}</p>
-                  <div className="flex gap-2 mt-3">
-                    <button className="w-7 h-7 rounded-lg bg-muted hover:bg-primary hover:text-primary-foreground transition-colors flex items-center justify-center">
-                      <Linkedin className="w-3.5 h-3.5" />
-                    </button>
-                    <button className="w-7 h-7 rounded-lg bg-muted hover:bg-primary hover:text-primary-foreground transition-colors flex items-center justify-center">
-                      <Twitter className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
 
         {/* Timeline */}
         <section className="section-padding">

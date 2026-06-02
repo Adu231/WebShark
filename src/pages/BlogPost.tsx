@@ -7,10 +7,12 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Clock, Calendar, Share2, Twitter, Linkedin, Copy } from 'lucide-react';
 import { toast } from 'sonner';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function BlogPost() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const post = BLOG_POSTS.find(p => p.slug === slug);
   const related = BLOG_POSTS.filter(p => p.slug !== slug).slice(0, 3);
 
@@ -115,7 +117,7 @@ export default function BlogPost() {
             <div className="mt-10 rounded-2xl bg-gradient-to-br from-primary/5 to-accent/5 border border-primary/20 p-6 text-center">
               <h3 className="font-bold mb-2">Ready to implement these strategies?</h3>
               <p className="text-sm text-muted-foreground mb-4">Start your free WebShark audit and get personalized recommendations for your website.</p>
-              <Button className="bg-gradient-brand hover:opacity-90 text-white" onClick={() => navigate('/register')}>
+              <Button className="bg-gradient-brand hover:opacity-90 text-white" onClick={() => navigate(user ? '/dashboard' : '/register')}>
                 Start Free Audit
               </Button>
             </div>
