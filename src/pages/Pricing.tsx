@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { useIntersection } from '@/hooks/useIntersection';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/hooks/useAuth';
 import {
   CheckCircle2, X, ArrowRight, Zap, Shield, Sparkles,
   HelpCircle, Star, Building, ChevronDown
@@ -38,6 +39,7 @@ function FeatureCell({ value }: { value: string | boolean }) {
 
 export default function Pricing() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [ref, inView] = useIntersection<HTMLDivElement>({ threshold: 0.05 });
   const [yearly, setYearly] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -104,7 +106,7 @@ export default function Pricing() {
                   <Button
                     className={cn('w-full mb-5 gap-1', plan.popular ? 'bg-gradient-brand hover:opacity-90 text-white' : '')}
                     variant={plan.popular ? 'default' : 'outline'}
-                    onClick={() => navigate(plan.id === 'enterprise' ? '/contact' : '/register')}
+                    onClick={() => navigate(plan.id === 'enterprise' ? '/contact' : user ? '/dashboard' : '/register')}
                   >
                     {plan.cta} <ArrowRight className="w-3.5 h-3.5" />
                   </Button>

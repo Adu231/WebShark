@@ -8,6 +8,7 @@ import { ArrowRight, Play, Star, TrendingUp, Shield, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/hooks/useAuth';
 
 function StatCard({ value, suffix, label, start }: { value: number; suffix: string; label: string; start: boolean }) {
   const count = useCounter(value, 2200, start);
@@ -29,6 +30,7 @@ function StatCard({ value, suffix, label, start }: { value: number; suffix: stri
 
 export default function HeroSection() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [ref, inView] = useIntersection<HTMLDivElement>();
   const [url, setUrl] = useState('');
   const [analyzing, setAnalyzing] = useState(false);
@@ -39,7 +41,7 @@ export default function HeroSection() {
     setAnalyzing(true);
     setTimeout(() => {
       setAnalyzing(false);
-      navigate('/register');
+      navigate(user ? '/dashboard' : '/register');
     }, 1500);
   };
 

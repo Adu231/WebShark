@@ -7,9 +7,11 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function PricingSection() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [ref, inView] = useIntersection<HTMLDivElement>({ threshold: 0.05 });
   const [yearly, setYearly] = useState(false);
 
@@ -87,10 +89,10 @@ export default function PricingSection() {
               <Button
                 className={cn(
                   'w-full mb-6',
-                  plan.popular ? 'bg-gradient-brand hover:opacity-90 text-white' : 'variant-outline'
+                  plan.popular ? 'bg-gradient-brand hover:opacity-90 text-white' : 'outline'
                 )}
                 variant={plan.popular ? 'default' : 'outline'}
-                onClick={() => navigate(plan.monthlyPrice === 0 ? '/register' : '/register')}
+                onClick={() => navigate(user ? '/dashboard' : '/register')}
               >
                 {plan.cta}
                 <ArrowRight className="w-4 h-4 ml-1" />

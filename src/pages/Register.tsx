@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { UserRole, ROLE_META } from '@/lib/auth';
@@ -51,8 +51,14 @@ const STEP_LABELS = ['Choose Role', 'Your Details', 'Set Password'];
 
 export default function Register() {
   const navigate = useNavigate();
-  const { register } = useAuth();
+  const { user, register, loading: authLoading } = useAuth();
   const { theme, toggleTheme } = useTheme();
+
+  useEffect(() => {
+    if (!authLoading && user) {
+      navigate('/dashboard');
+    }
+  }, [user, authLoading]);
 
   const [step, setStep] = useState(1); // 1 = role, 2 = details, 3 = password
   const [selectedRole, setSelectedRole] = useState<UserRole | null>(null);

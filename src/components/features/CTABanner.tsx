@@ -3,9 +3,11 @@ import { useIntersection } from '@/hooks/useIntersection';
 import { ArrowRight, Sparkles, TrendingUp, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function CTABanner() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [ref, inView] = useIntersection<HTMLDivElement>();
 
   return (
@@ -44,14 +46,14 @@ export default function CTABanner() {
               <Button
                 size="lg"
                 className="bg-white text-primary hover:bg-white/90 font-semibold gap-2 px-8"
-                onClick={() => navigate('/register')}
+                onClick={() => navigate(user ? '/dashboard' : '/register')}
               >
                 Start Free Trial <ArrowRight className="w-4 h-4" />
               </Button>
               <Button
                 size="lg"
                 variant="outline"
-                className="border-white/30 text-white hover:bg-white/10 gap-2"
+                className="border-white/30 text-white bg-transparent hover:bg-white/10 hover:text-white gap-2"
                 onClick={() => navigate('/contact')}
               >
                 Talk to Sales
