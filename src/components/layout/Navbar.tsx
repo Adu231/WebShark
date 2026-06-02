@@ -77,6 +77,12 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 to={link.href}
+                onClick={(e) => {
+                  if (location.pathname === link.href) {
+                    e.preventDefault();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }
+                }}
                 className={cn(
                   'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
                   location.pathname === link.href
@@ -182,6 +188,13 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 to={link.href}
+                onClick={(e) => {
+                  if (location.pathname === link.href) {
+                    e.preventDefault();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    setMobileOpen(false);
+                  }
+                }}
                 className={cn(
                   'px-4 py-3 rounded-lg text-sm font-medium transition-colors',
                   location.pathname === link.href

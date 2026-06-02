@@ -106,7 +106,7 @@ export default function Pricing() {
                   <Button
                     className={cn('w-full mb-5 gap-1', plan.popular ? 'bg-gradient-brand hover:opacity-90 text-white' : '')}
                     variant={plan.popular ? 'default' : 'outline'}
-                    onClick={() => navigate(plan.id === 'enterprise' ? '/contact' : user ? '/dashboard' : '/register')}
+                    onClick={() => navigate(plan.id === 'enterprise' ? '/contact' : user ? `/payment?plan=${plan.id}&yearly=${yearly}` : '/register')}
                   >
                     {plan.cta} <ArrowRight className="w-3.5 h-3.5" />
                   </Button>

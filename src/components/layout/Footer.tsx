@@ -6,7 +6,7 @@ const FOOTER_LINKS = {
     { label: 'Features', href: '/features' },
     { label: 'Pricing', href: '/pricing' },
     { label: 'Dashboard', href: '/dashboard' },
-    { label: 'API Documentation', href: '/features' },
+    { label: 'API Documentation', href: '/integrations/rest-api' },
     { label: 'Changelog', href: '/blog' },
   ],
   Company: [
@@ -17,10 +17,10 @@ const FOOTER_LINKS = {
     { label: 'Contact', href: '/contact' },
   ],
   Resources: [
-    { label: 'Documentation', href: '/features' },
-    { label: 'SEO Guide', href: '/blog' },
+    { label: 'Documentation', href: '/integrations/rest-api' },
+    { label: 'SEO Guide', href: '/blog/10-seo-audits-every-website-needs' },
     { label: 'FAQ', href: '/faq' },
-    { label: 'Status Page', href: '/dashboard' },
+    { label: 'Status Page', href: '/dashboard?tab=monitor' },
     { label: 'Community', href: '/contact' },
   ],
   Legal: [
@@ -79,6 +79,13 @@ export default function Footer() {
                   <li key={link.label}>
                     <Link
                       to={link.href}
+                      onClick={(e) => {
+                        const targetPath = link.href.split('?')[0];
+                        if (window.location.pathname === targetPath) {
+                          e.preventDefault();
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }
+                      }}
                       className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                     >
                       {link.label}

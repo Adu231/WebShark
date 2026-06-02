@@ -92,7 +92,7 @@ export default function PricingSection() {
                   plan.popular ? 'bg-gradient-brand hover:opacity-90 text-white' : 'outline'
                 )}
                 variant={plan.popular ? 'default' : 'outline'}
-                onClick={() => navigate(user ? '/dashboard' : '/register')}
+                onClick={() => navigate(plan.id === 'enterprise' ? '/contact' : user ? `/payment?plan=${plan.id}&yearly=${yearly}` : '/register')}
               >
                 {plan.cta}
                 <ArrowRight className="w-4 h-4 ml-1" />

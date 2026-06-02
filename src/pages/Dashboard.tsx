@@ -13,7 +13,7 @@ import {
   CheckCircle, ArrowUpRight, Plus, RefreshCw, Search,
   BarChart3, Target, Shield, Users, Building2, SearchCode, ShieldCheck,
   Code, Download, Settings, Trash2, Key, Star, Calendar, Mail, FileText,
-  MapPin, Clock, Server, Check, ArrowRight, Play
+  MapPin, Clock, Server, Check, ArrowRight, Play, Sparkles
 } from 'lucide-react';
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -119,6 +119,19 @@ export default function Dashboard() {
   // 1. Audit Tab States
   const [auditIssuesList, setAuditIssuesList] = useState(AUDIT_ISSUES);
   const [ranAudit, setRanAudit] = useState(false);
+  const [auditScore, setAuditScore] = useState(92);
+  const [auditedDomain, setAuditedDomain] = useState('yourwebsite.com');
+
+  const getHostname = (url: string) => {
+    try {
+      const cleanUrl = url.trim();
+      if (!cleanUrl) return 'yourwebsite.com';
+      const parsed = new URL(cleanUrl.includes('://') ? cleanUrl : `https://${cleanUrl}`);
+      return parsed.hostname;
+    } catch {
+      return url;
+    }
+  };
 
   // 2. SEO Tab States
   const [trackedKws, setTrackedKws] = useState(KEYWORD_DATA);
@@ -229,13 +242,17 @@ export default function Dashboard() {
     setTimeout(() => {
       setRunning(false);
       setRanAudit(true);
+      const score = Math.floor(Math.random() * 34) + 65; // randomized score between 65 and 98
+      setAuditScore(score);
+      const host = getHostname(auditUrl);
+      setAuditedDomain(host);
       setAuditIssuesList([
         { type: 'Critical', count: Math.floor(Math.random() * 5) + 1, color: '#ef4444', icon: AlertCircle },
         { type: 'Warnings', count: Math.floor(Math.random() * 15) + 5, color: '#f59e0b', icon: AlertCircle },
         { type: 'Notices', count: Math.floor(Math.random() * 30) + 10, color: '#3b82f6', icon: AlertCircle },
-        { type: 'Passed', count: 172, color: '#22c55e', icon: CheckCircle }
+        { type: 'Passed', count: Math.floor(Math.random() * 50) + 150, color: '#22c55e', icon: CheckCircle }
       ]);
-      toast.success('Audit complete! Found performance and meta optimization logs.');
+      toast.success(`Audit complete for ${host}! Score: ${score}/100.`);
     }, 2000);
   };
 
@@ -326,23 +343,6 @@ export default function Dashboard() {
               </Button>
             </div>
           </div>
-
-          {/* Role Info Strip */}
-          {!loading && (
-            <div className={`flex flex-wrap items-center gap-3 p-3 rounded-xl border text-sm ${roleColorClass}`}>
-              <RoleIcon className="w-4 h-4 flex-shrink-0" />
-              <span className="font-semibold">{meta.label}</span>
-              <span className="text-muted-foreground text-xs hidden sm:inline">|</span>
-              <span className="text-xs text-muted-foreground hidden sm:inline">{meta.description}</span>
-              <div className="ml-auto flex flex-wrap gap-1">
-                {meta.flow.map((step, i) => (
-                  <span key={i} className={`text-[10px] px-2 py-0.5 rounded-full font-medium border ${roleColorClass}`}>
-                    {step}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
 
         {/* ──── TAB CONTENTS ──── */}
@@ -424,7 +424,7 @@ export default function Dashboard() {
               {/* Audit Score */}
               <div className="rounded-xl border border-border bg-background p-4 sm:p-5">
                 <h3 className="text-sm font-semibold mb-1">Audit Health</h3>
-                <p className="text-xs text-muted-foreground mb-4">yourwebsite.com</p>
+                <p className="text-xs text-muted-foreground mb-4 truncate font-semibold">{auditedDomain}</p>
                 {loading ? (
                   <div className="h-44 bg-muted rounded-lg animate-pulse" />
                 ) : (
@@ -434,16 +434,16 @@ export default function Dashboard() {
                         <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
                           <circle cx="50" cy="50" r="40" fill="none" stroke="hsl(var(--muted))" strokeWidth="10" />
                           <circle cx="50" cy="50" r="40" fill="none" stroke="hsl(221,83%,53%)" strokeWidth="10"
-                            strokeDasharray={`${92 * 2.51} 251`} strokeLinecap="round" />
+                            strokeDasharray={`${auditScore * 2.51} 251`} strokeLinecap="round" />
                         </svg>
                         <div className="absolute inset-0 flex flex-col items-center justify-center">
-                          <span className="text-2xl font-black">92</span>
+                          <span className="text-2xl font-black">{auditScore}</span>
                           <span className="text-[10px] text-muted-foreground">/ 100</span>
                         </div>
                       </div>
                     </div>
                     <div className="space-y-2">
-                      {AUDIT_ISSUES.map(({ type, count, color }) => (
+                      {auditIssuesList.map(({ type, count, color }) => (
                         <div key={type} className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: color }} />
@@ -532,19 +532,26 @@ export default function Dashboard() {
             {/* Audit Results Panel */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="md:col-span-1 rounded-xl border border-border bg-background p-5 text-center">
-                <h4 className="text-sm font-semibold mb-4">Audited Health Score</h4>
+                <h4 className="text-sm font-semibold mb-2">Audited Health Score</h4>
+                <p className="text-xs text-muted-foreground mb-4 truncate font-semibold">{auditedDomain}</p>
                 <div className="relative w-28 h-28 mx-auto mb-4">
                   <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
                     <circle cx="50" cy="50" r="40" fill="none" stroke="hsl(var(--muted))" strokeWidth="8" />
                     <circle cx="50" cy="50" r="40" fill="none" stroke="hsl(221,83%,53%)" strokeWidth="8"
-                      strokeDasharray={`${ranAudit ? 84 * 2.51 : 92 * 2.51} 251`} strokeLinecap="round" />
+                      strokeDasharray={`${auditScore * 2.51} 251`} strokeLinecap="round" />
                   </svg>
                   <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <span className="text-2xl font-black">{ranAudit ? 84 : 92}</span>
+                    <span className="text-2xl font-black">{auditScore}</span>
                     <span className="text-[10px] text-muted-foreground">/ 100</span>
                   </div>
                 </div>
-                <Badge className="bg-green-500/10 text-green-500 border-0 text-[10px]">Good Standing</Badge>
+                <Badge className={cn('border-0 text-[10px]',
+                  auditScore >= 80 ? 'bg-green-500/10 text-green-500' :
+                  auditScore >= 70 ? 'bg-yellow-500/10 text-yellow-600' :
+                  'bg-red-500/10 text-red-500'
+                )}>
+                  {auditScore >= 80 ? 'Good Standing' : auditScore >= 70 ? 'Needs Improvement' : 'Critical Issues'}
+                </Badge>
               </div>
 
               <div className="md:col-span-2 rounded-xl border border-border bg-background p-5">
@@ -692,7 +699,7 @@ export default function Dashboard() {
                       <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                       <XAxis dataKey="time" tick={{ fontSize: 10 }} />
                       <YAxis tick={{ fontSize: 10 }} width={25} />
-                      <Tooltip contentStyle={{ fontSize: 11 }} />
+                      <Tooltip content={<CustomTooltip />} />
                       <Line type="monotone" dataKey="latency" name="Latency (ms)" stroke="hsl(221,83%,53%)" strokeWidth={2} activeDot={{ r: 6 }} />
                     </LineChart>
                   </ResponsiveContainer>

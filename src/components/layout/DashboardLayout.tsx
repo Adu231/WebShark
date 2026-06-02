@@ -5,6 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { ROLE_META, UserRole } from '@/lib/auth';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
+import { toast } from 'sonner';
 import {
   LayoutDashboard, Search, TrendingUp, Target, Activity,
   Sparkles, BarChart3, Settings, User, LogOut, Sun, Moon,
@@ -77,6 +78,14 @@ export default function DashboardLayout({ children, title }: DashboardLayoutProp
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [notifications, setNotifications] = useState([
+    { id: 1, text: 'yourwebsite.com ranking improved: position 3 → 1 for "free seo analyzer"', time: '2h ago', unread: true, type: 'success' },
+    { id: 2, text: 'shop.yoursite.com load time increased to 4.2s — investigate server response', time: '5h ago', unread: true, type: 'warning' },
+    { id: 3, text: '15 new backlinks detected from high-authority domains this week', time: '1d ago', unread: false, type: 'info' }
+  ]);
+
+  const unreadCount = notifications.filter(n => n.unread).length;
 
   const role: UserRole = (user?.role as UserRole) ?? 'business';
   const navItems = NAV_BY_ROLE[role] ?? NAV_BY_ROLE.business;
@@ -240,25 +249,112 @@ export default function DashboardLayout({ children, title }: DashboardLayoutProp
             >
               {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
-            <button className="w-9 h-9 relative flex items-center justify-center rounded-lg hover:bg-muted transition-colors">
-              <Bell className="w-4 h-4" />
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-accent rounded-full" />
-            </button>
+            <div className="relative">
+              <button
+                onClick={() => setShowNotifications(!showNotifications)}
+                className="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-muted transition-colors relative"
+                aria-label="Notifications"
+              >
+                <Bell className="w-4 h-4" />
+                {unreadCount > 0 && (
+                  <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-accent text-[9px] font-bold text-white rounded-full flex items-center justify-center animate-pulse">
+                    {unreadCount}
+                  </span>
+                )}
+              </button>
+
+              {/* Custom Notifications Dropdown Popover */}
+              {showNotifications && (
+                <div className="absolute right-0 mt-2 w-80 bg-background border border-border rounded-xl shadow-xl z-50 overflow-hidden font-sans">
+                  <div className="px-4 py-3 border-b border-border flex items-center justify-between">
+                    <span className="font-bold text-xs">Notifications</span>
+                    {unreadCount > 0 && (
+                      <button
+                        onClick={() => {
+                          setNotifications(notifications.map(n => ({ ...n, unread: false })));
+                          toast.success('All notifications marked as read');
+                        }}
+                        className="text-[10px] text-primary hover:underline"
+                      >
+                        Mark all as read
+                      </button>
+                    )}
+                  </div>
+                  <div className="max-h-64 overflow-y-auto divide-y divide-border/60">
+                    {notifications.length === 0 ? (
+                      <div className="p-6 text-center text-xs text-muted-foreground">
+                        <Bell className="w-8 h-8 mx-auto mb-2 text-muted-foreground/45" />
+                        No new notifications
+                      </div>
+                    ) : (
+                      notifications.map(n => (
+                        <div
+                          key={n.id}
+                          onClick={() => {
+                            setNotifications(notifications.map(item => item.id === n.id ? { ...item, unread: false } : item));
+                          }}
+                          className={cn(
+                            'p-3.5 text-left text-[11px] leading-relaxed cursor-pointer transition-colors hover:bg-muted/30',
+                            n.unread ? 'bg-primary/5 font-semibold text-foreground' : 'text-muted-foreground'
+                          )}
+                        >
+                          <div className="flex items-start gap-2">
+                            <span className={cn('w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0',
+                              n.unread ? 'bg-primary' : 'bg-transparent'
+                            )} />
+                            <div className="flex-1">
+                              <p>{n.text}</p>
+                              <span className="text-[9px] text-muted-foreground mt-1 block">{n.time}</span>
+                            </div>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setNotifications(notifications.filter(item => item.id !== n.id));
+                              }}
+                              className="text-muted-foreground/45 hover:text-destructive text-[10px] ml-1"
+                              title="Delete notification"
+                            >
+                              <X className="w-3 h-3" />
+                            </button>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                  {notifications.length > 0 && (
+                    <div className="px-4 py-2 bg-muted/30 border-t border-border text-center">
+                      <button
+                        onClick={() => {
+                          setNotifications([]);
+                          toast.success('Notifications cleared');
+                        }}
+                        className="text-[10px] text-destructive hover:underline font-medium"
+                      >
+                        Clear all notifications
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
             {user && (
-              <div className="flex items-center gap-2 pl-1">
-                <Avatar className="w-7 h-7">
+              <button
+                onClick={() => navigate('/profile')}
+                className="flex items-center gap-2 pl-1 hover:opacity-80 transition-all text-left"
+              >
+                <Avatar className="w-7 h-7 border border-border/80 shadow-sm">
                   <AvatarImage src={user.avatar} alt={user.name} />
                   <AvatarFallback className="bg-primary text-primary-foreground text-xs">
                     {user.name.charAt(0)}
                   </AvatarFallback>
                 </Avatar>
                 <div className="hidden sm:block">
-                  <p className="text-xs font-medium leading-none">{user.name}</p>
+                  <p className="text-xs font-semibold leading-none">{user.name}</p>
                   <p className="text-[10px] text-muted-foreground mt-0.5 capitalize">
                     {roleMeta.label}
                   </p>
                 </div>
-              </div>
+              </button>
             )}
           </div>
         </header>
