@@ -19,8 +19,14 @@ const ICON_MAP: Record<string, React.ElementType> = {
 };
 
 const INTEGRATIONS = [
-  'Google Analytics', 'Google Search Console', 'WordPress', 'Shopify',
-  'HubSpot', 'Slack', 'Zapier', 'REST API'
+  { name: 'Google Analytics', slug: 'google-analytics' },
+  { name: 'Google Search Console', slug: 'google-search-console' },
+  { name: 'WordPress', slug: 'wordpress' },
+  { name: 'Shopify', slug: 'shopify' },
+  { name: 'HubSpot', slug: 'hubspot' },
+  { name: 'Slack', slug: 'slack' },
+  { name: 'Zapier', slug: 'zapier' },
+  { name: 'REST API', slug: 'rest-api' }
 ];
 
 export default function Features() {
@@ -162,10 +168,14 @@ export default function Features() {
             <h2 className="text-3xl font-bold mb-4">Integrates with your stack</h2>
             <p className="text-muted-foreground mb-10 max-w-xl mx-auto">Connect WebShark with the tools you already use for a seamless workflow.</p>
             <div className="flex flex-wrap items-center justify-center gap-3">
-              {INTEGRATIONS.map(name => (
-                <div key={name} className="px-4 py-2.5 rounded-xl border border-border bg-background text-sm font-medium hover:border-primary/40 hover:bg-primary/5 transition-colors cursor-default">
-                  {name}
-                </div>
+              {INTEGRATIONS.map(item => (
+                <button
+                  key={item.slug}
+                  onClick={() => navigate(`/integrations/${item.slug}`)}
+                  className="px-5 py-3 rounded-xl border border-border bg-background text-sm font-semibold hover:border-primary/40 hover:bg-primary/5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
+                >
+                  {item.name}
+                </button>
               ))}
             </div>
           </div>

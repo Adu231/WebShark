@@ -22,6 +22,7 @@ import FAQPage from "./pages/FAQPage";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import NotFound from "./pages/NotFound";
+import IntegrationDetail from "./pages/IntegrationDetail";
 
 const queryClient = new QueryClient();
 
@@ -58,6 +59,7 @@ const App = () => (
             <Route path="/faq" element={<FAQPage />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/terms" element={<TermsAndConditions />} />
+            <Route path="/integrations/:slug" element={<IntegrationDetail />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

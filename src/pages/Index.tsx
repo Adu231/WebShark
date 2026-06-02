@@ -10,6 +10,7 @@ import TestimonialsSection from '@/components/features/TestimonialsSection';
 import PricingSection from '@/components/features/PricingSection';
 import FAQSection from '@/components/features/FAQSection';
 import CTABanner from '@/components/features/CTABanner';
+import IntegrationsSection from '@/components/features/IntegrationsSection';
 
 const Index = () => {
   return (
@@ -24,6 +25,7 @@ const Index = () => {
         <TestimonialsSection />
         <PricingSection />
         <FAQSection />
+        <IntegrationsSection />
         <CTABanner />
       </main>
       <Footer />
